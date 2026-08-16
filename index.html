@@ -6,6 +6,27 @@
 <title>HAY Celotehan</title>
 
 <style>
+  #loginPage{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+#loginForm,
+#registerForm{
+    width:320px;
+    background:white;
+    padding:25px;
+    border-radius:20px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.15);
+}
+
+#halamanUtama{
+    text-align:center;
+    padding:20px;
+}
+
 body{
   margin:0;
   font-family:sans-serif;
@@ -177,8 +198,57 @@ img{
   </div>
 </div>
 
-<div class="container">
+<div id="loginPage">
 
+
+<!-- FORM LOGIN -->
+<div id="loginForm">
+
+    <h2>Login</h2>
+
+    <input type="email" id="loginEmail" placeholder="Email">
+
+    <input type="password" id="loginPassword" placeholder="Password">
+
+    <button onclick="login()">Login</button>
+
+
+    <p>
+        Belum punya akun?
+        <button onclick="bukaDaftar()">Daftar Akun</button>
+    </p>
+
+</div>
+
+
+<!-- FORM DAFTAR AKUN -->
+<div id="registerForm" class="box" style="display:none;">
+    <h2>Daftar Akun</h2>
+
+    <input type="text" id="regName" placeholder="Nama Lengkap">
+
+    <input type="email" id="regEmail" placeholder="Email">
+
+    <input type="password" id="regPassword" placeholder="Password">
+
+    <input type="password" id="regConfirm" placeholder="Konfirmasi Password">
+
+    <button onclick="register()">Daftar</button>
+
+    <p>
+        Sudah punya akun?
+        <button onclick="kembaliLogin()">Login</button>
+    </p>
+
+    <p id="registerMessage"></p>
+</div>
+
+<div class="container" id="homePage" style="display:none;">
+
+    <div style="text-align:center;margin-bottom:20px;">
+        <h2>Selamat Datang</h2>
+        <h3 id="namaUser"></h3>
+    </div>
 <!-- POST FORM -->
 <div class="post-box">
   <input id="title" placeholder="Judul postingan...">
@@ -188,6 +258,13 @@ img{
     <label class="btn">
       📷 Upload
       <input type="file" id="image" hidden>
+      <div id="namaFile"
+style="
+margin-top:8px;
+font-size:13px;
+color:#666;">
+Belum ada file dipilih
+</div>
     </label>
 
     <button id="postBtn" class="post-btn">Posting</button>
@@ -208,7 +285,6 @@ import {
   doc, updateDoc, arrayUnion, deleteDoc
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
 /* 🔥 GANTI CONFIG FIREBASE KAMU */
 const firebaseConfig = {
@@ -220,7 +296,6 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const storage = getStorage(app);
 signInAnonymously(getAuth(app));
 
 const postsDiv = document.getElementById("posts");
@@ -229,7 +304,29 @@ const title = document.getElementById("title");
 const text = document.getElementById("text");
 const fileInput = document.getElementById("image");
 const fileInfo = document.getElementById("fileInfo");
-const postBtn = document.getElementById("postBtn");
+const postBtn =
+document.getElementById("postBtn");
+
+document.getElementById("image")
+.addEventListener("change", function(){
+
+    let file = this.files[0];
+
+    if(file){
+
+        document.getElementById("namaFile")
+        .innerText =
+        "📎 " + file.name;
+
+    }else{
+
+        document.getElementById("namaFile")
+        .innerText =
+        "Belum ada file dipilih";
+
+    }
+
+});
 
 /* FILE NAME */
 fileInput.addEventListener("change", ()=>{
@@ -249,20 +346,54 @@ postBtn.onclick = async()=>{
 
   let url = "";
 
-  if(file){
-    const r = ref(storage,"posts/"+Date.now()+"_"+file.name);
-    await uploadBytes(r,file);
-    url = await getDownloadURL(r);
-  }
+   if(file){
 
+    const formData = new FormData();
+
+    formData.append("file", file);
+
+    formData.append(
+        "upload_preset",
+        "Celotehan"
+    );
+
+    const res = await fetch(
+        "https://api.cloudinary.com/v1_1/dhzgp20sw/auto/upload",
+        {
+            method: "POST",
+            body: formData
+        }
+    );
+
+    const data = await res.json();
+
+console.log("HASIL CLOUDINARY:", data);
+
+if(data.secure_url){
+    url = data.secure_url;
+}else{
+    alert("Upload gagal");
+    return;
+}
+}
+
+  const username = localStorage.getItem("namaLogin") || "Anonim";
   await addDoc(collection(db,"posts"),{
+    username: username,
+
     title:t,
     text:tx,
+
     image:url,
+
+    fileName: file ? file.name : "",
+
+    fileType: file ? file.type : "",
+
     comments:[],
     minimized:false,
     created:new Date().toLocaleString()
-  });
+});
 
   /* RESET */
   title.value="";
@@ -283,11 +414,13 @@ onSnapshot(collection(db,"posts"),snap=>{
     postsDiv.innerHTML += `
       <div class="post">
         <div class="top">
-          <div>
-            <b>${data.title || "Tanpa Judul"}</b>
-            <div class="time">${data.created}</div>
-          </div>
+          <div style="font-size:14px;font-weight:bold;color:#333;">
+        👤 ${data.username || "Anonim"}
+    </div>
 
+    <div class="time">
+        🕒 ${data.created}
+    </div>
           <div>
             <button class="btn" onclick="toggle('${d.id}',${data.minimized})">
               ${data.minimized ? "📂" : "📦"}
@@ -296,8 +429,13 @@ onSnapshot(collection(db,"posts"),snap=>{
           </div>
         </div>
 
-        ${!data.minimized ? `
-          <p>${data.text || ""}</p>
+       ${!data.minimized ? `
+
+    <h3 style="margin-top:12px;">
+        ${data.title || "Tanpa Judul"}
+    </h3>
+
+    <p>${data.text || ""}</p>
           ${data.image ? `<img src="${data.image}">` : ""}
 
           <div class="comment-box">
@@ -326,13 +464,194 @@ window.kirim = async(id)=>{
   const val = input.value.trim();
   if(!val) return;
 
-  await updateDoc(doc(db,"posts",id),{
-    comments: arrayUnion(val)
-  });
+  const username =
+localStorage.getItem("namaLogin") || "Anonim";
+
+await updateDoc(doc(db,"posts",id),{
+    comments: arrayUnion(username + ": " + val)
+});
 
   input.value="";
 };
+
+
+function register(){
+
+    let nama = document.getElementById("regName").value;
+    let email = document.getElementById("regEmail").value;
+    let password = document.getElementById("regPassword").value;
+    let confirm = document.getElementById("regConfirm").value;
+
+    let pesan = document.getElementById("registerMessage");
+
+
+    if(nama=="" || email=="" || password==""){
+        pesan.innerHTML="Data belum lengkap";
+        return;
+    }
+
+
+    if(password !== confirm){
+        pesan.innerHTML="Password tidak sama";
+        return;
+    }
+
+
+    let akun = {
+        nama:nama,
+        email:email,
+        password:password
+    };
+
+
+    localStorage.setItem("akun", JSON.stringify(akun));
+
+
+    pesan.innerHTML="Pendaftaran berhasil";
+
+
+    setTimeout(()=>{
+        document.getElementById("registerForm").style.display="none";
+    },1500);
+
+}
 </script>
 
+<script>
+
+document.getElementById("image")
+.addEventListener("change", function(){
+
+    let file = this.files[0];
+
+    if(file){
+
+        document.getElementById("namaFile")
+        .innerText =
+        "📎 " + file.name;
+
+    }else{
+
+        document.getElementById("namaFile")
+        .innerText =
+        "Belum ada file dipilih";
+
+    }
+
+});
+
+function bukaDaftar(){
+    document.getElementById("loginForm").style.display="none";
+    document.getElementById("registerForm").style.display="block";
+}
+
+
+function kembaliLogin(){
+    document.getElementById("registerForm").style.display="none";
+    document.getElementById("loginForm").style.display="block";
+}
+
+function register(){
+
+    let nama = document.getElementById("regName").value;
+    let email = document.getElementById("regEmail").value;
+    let password = document.getElementById("regPassword").value;
+    let confirm = document.getElementById("regConfirm").value;
+
+
+    if(nama=="" || email=="" || password==""){
+        alert("Data belum lengkap");
+        return;
+    }
+
+
+    if(password !== confirm){
+        alert("Password tidak sama");
+        return;
+    }
+
+
+    let akun = {
+        nama: nama,
+        email: email,
+        password: password
+    };
+
+
+    localStorage.setItem("akun", JSON.stringify(akun));
+
+
+    alert("Pendaftaran berhasil");
+
+
+    document.getElementById("registerForm").style.display="none";
+    document.getElementById("loginForm").style.display="block";
+
+}
+
+function login(){
+
+    let email = document.getElementById("loginEmail").value;
+    let password = document.getElementById("loginPassword").value;
+
+
+    let dataAkun = localStorage.getItem("akun");
+
+
+    if(!dataAkun){
+        alert("Belum ada akun, silahkan daftar dulu");
+        return;
+    }
+
+
+    let akun = JSON.parse(dataAkun);
+
+
+if(email === akun.email && password === akun.password){
+
+    alert("Login berhasil");
+
+     localStorage.setItem("loginStatus","aktif");
+    localStorage.setItem("namaLogin", akun.nama);
+
+    document.getElementById("loginForm").style.display="none";
+
+
+    document.getElementById("homePage").style.display="block";
+
+
+    document.getElementById("namaUser").innerHTML = 
+    "Halo, " + akun.nama;
+
+    }else{
+
+        alert("Email atau password salah");
+    }
+  }
+
+
+   function logout(){
+    alert("Logout diklik");
+
+
+}
+
+window.onload = function(){
+
+    let status = localStorage.getItem("loginStatus");
+
+    if(status === "aktif"){
+
+        let nama = localStorage.getItem("namaLogin");
+        document.getElementById("loginForm").style.display="none";
+        document.getElementById("homePage").style.display="block";
+
+        document.getElementById("namaUser").innerHTML =
+        "Halo, " + nama;
+
+    }
+
+}
+</script>
 </body>
 </html>
