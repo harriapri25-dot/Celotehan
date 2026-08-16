@@ -6,93 +6,188 @@
 <title>HAY Celotehan</title>
 
 <style>
-  #loginPage{
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-}
-
-#loginForm,
-#registerForm{
-    width:320px;
-    background:white;
-    padding:25px;
-    border-radius:20px;
-    box-shadow:0 5px 15px rgba(0,0,0,0.15);
-}
-
-#halamanUtama{
-    text-align:center;
-    padding:20px;
-}
+*{box-sizing:border-box}
 
 body{
   margin:0;
-  font-family:sans-serif;
+  font-family:Arial,sans-serif;
   background:repeating-linear-gradient(
     to bottom,
     #fdfdfd 0px,
     #fdfdfd 28px,
     #e3e3e3 29px
   );
+  color:#172033;
 }
+
+button,input,textarea{font:inherit}
+button{cursor:pointer}
 
 /* HEADER */
 .header{
   position:sticky;
   top:0;
-  padding:15px;
-  text-align:center;
+  z-index:100;
+  padding:14px 18px;
   background:linear-gradient(90deg,#0f172a,#1f2937,#111827);
+  box-shadow:0 3px 12px rgba(0,0,0,.18);
 }
 
-/* TITLE */
 .title{
   display:flex;
   justify-content:center;
   align-items:center;
-  gap:12px;
-  color:#ff1e1e;
+  gap:10px;
+  color:#ff2b2b;
   font-size:24px;
   font-weight:900;
   letter-spacing:1px;
-  text-shadow:0 0 10px rgba(255,0,0,0.6);
 }
 
-.title img{
-  width:38px;
-  height:38px;
-  filter: drop-shadow(0 0 6px rgba(255,0,0,0.7));
+.logo{
+  font-size:30px;
 }
 
-/* WAVE */
 .wave{
   display:flex;
   justify-content:space-between;
-  height:25px;
-  margin-top:10px;
+  height:24px;
+  margin-top:9px;
 }
+
 .wave span{
   flex:1;
   margin:0 1px;
-  background:rgba(255,255,255,0.85);
+  background:rgba(255,255,255,.85);
   border-radius:10px;
   animation:wave 1.2s infinite;
 }
-.wave span:nth-child(odd){animation-delay:0.2s;}
-.wave span:nth-child(even){animation-delay:0.4s;}
+
+.wave span:nth-child(odd){
+  animation-delay:.2s;
+}
+
+.wave span:nth-child(even){
+  animation-delay:.4s;
+}
 
 @keyframes wave{
   0%,100%{height:6px}
-  50%{height:25px}
+  50%{height:24px}
 }
 
-/* CONTAINER */
-.container{
-  max-width:600px;
+/* LOGIN */
+#loginPage{
+  min-height:calc(100vh - 90px);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+}
+
+.auth-box{
+  width:min(370px,94vw);
+  background:#fff;
+  padding:24px;
+  border-radius:20px;
+  box-shadow:0 8px 25px rgba(0,0,0,.15);
+}
+
+.auth-box h2{
+  text-align:center;
+  margin-top:0;
+}
+
+.auth-box input{
+  width:100%;
+  padding:12px;
+  margin:7px 0;
+  border:1px solid #ddd;
+  border-radius:11px;
+  outline:none;
+}
+
+.auth-box input:focus{
+  border-color:#64748b;
+}
+
+.primary{
+  width:100%;
+  border:0;
+  border-radius:12px;
+  padding:12px;
+  margin-top:8px;
+  background:#0f172a;
+  color:white;
+  font-weight:700;
+}
+
+.secondary{
+  border:0;
+  background:#eef2f7;
+  border-radius:10px;
+  padding:9px 12px;
+}
+
+.link-btn{
+  border:0;
+  background:none;
+  color:#2563eb;
+  font-weight:700;
+}
+
+.small{
+  font-size:12px;
+  color:#64748b;
+}
+
+/* GENDER */
+.gender-row{
+  display:flex;
+  gap:10px;
+  margin:8px 0;
+}
+
+.gender-option{
+  flex:1;
+  border:1px solid #ddd;
+  background:#fff;
+  padding:11px;
+  border-radius:11px;
+}
+
+.gender-option.active{
+  border-color:#0f172a;
+  background:#f1f5f9;
+  font-weight:700;
+}
+
+/* HOME */
+#homePage{
+  max-width:650px;
   margin:auto;
+  padding:18px;
+}
+
+.welcome{
+  background:#fff;
   padding:15px;
+  border-radius:15px;
+  box-shadow:0 5px 14px rgba(0,0,0,.08);
+  margin-bottom:15px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.user-name{
+  font-size:18px;
+  font-weight:800;
+}
+
+.gender-logo{
+  font-size:20px;
 }
 
 /* POST BOX */
@@ -100,44 +195,60 @@ body{
   background:white;
   padding:15px;
   border-radius:15px;
-  box-shadow:0 5px 12px rgba(0,0,0,0.1);
+  box-shadow:0 5px 14px rgba(0,0,0,.08);
   margin-bottom:15px;
 }
 
-input, textarea{
+.post-box input,
+.post-box textarea{
   width:100%;
   padding:12px;
-  margin-top:8px;
-  border-radius:12px;
   border:1px solid #ddd;
+  border-radius:11px;
+  margin-top:8px;
 }
 
 textarea{
   min-height:120px;
-  resize:none;
+  resize:vertical;
 }
 
 .actions{
   display:flex;
   justify-content:space-between;
+  align-items:center;
+  gap:10px;
   margin-top:10px;
 }
 
-.btn{
-  background:#eee;
-  border:none;
-  padding:6px 10px;
-  border-radius:8px;
-  cursor:pointer;
+.upload-label,
+.post-btn{
+  border:0;
+  border-radius:20px;
+  padding:10px 16px;
+  font-weight:700;
+}
+
+.upload-label{
+  background:#eef2f7;
+  display:inline-block;
 }
 
 .post-btn{
   background:#0f172a;
-  color:white;
-  border:none;
-  padding:10px 18px;
-  border-radius:20px;
-  cursor:pointer;
+  color:#fff;
+}
+
+.post-btn:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+}
+
+.file-name{
+  font-size:12px;
+  color:#64748b;
+  margin-top:7px;
+  word-break:break-all;
 }
 
 /* POST */
@@ -145,40 +256,118 @@ textarea{
   background:white;
   padding:15px;
   border-radius:15px;
-  margin-bottom:10px;
-  box-shadow:0 4px 10px rgba(0,0,0,0.08);
+  box-shadow:0 5px 14px rgba(0,0,0,.08);
+  margin-bottom:15px;
 }
 
-.top{
+.post-header{
   display:flex;
   justify-content:space-between;
-  align-items:center;
+  gap:10px;
+  align-items:flex-start;
+}
+
+.author{
+  font-weight:800;
 }
 
 .time{
   font-size:11px;
   color:#777;
+  margin-top:3px;
 }
 
-img{
+.post-actions{
+  display:flex;
+  gap:5px;
+}
+
+.icon-btn{
+  border:0;
+  background:#eef2f7;
+  border-radius:8px;
+  padding:6px 9px;
+}
+
+.post h3{
+  margin:12px 0 6px;
+}
+
+.post p{
+  white-space:pre-wrap;
+  word-break:break-word;
+}
+
+.post-media{
   width:100%;
+  max-height:520px;
+  object-fit:contain;
   border-radius:10px;
   margin-top:8px;
 }
 
+.file-link{
+  display:block;
+  margin-top:9px;
+  padding:10px;
+  border-radius:10px;
+  background:#f1f5f9;
+  color:#2563eb;
+  text-decoration:none;
+  word-break:break-all;
+}
+
+/* COMMENT */
 .comment-box{
   display:flex;
-  gap:5px;
-  margin-top:8px;
+  gap:6px;
+  margin-top:12px;
 }
 
 .comment-box input{
   flex:1;
+  min-width:0;
+  padding:10px;
+  border:1px solid #ddd;
+  border-radius:10px;
+}
+
+.comment-box button{
+  border:0;
+  background:#0f172a;
+  color:white;
+  border-radius:10px;
+  padding:10px 14px;
 }
 
 .comment{
-  font-size:12px;
-  margin-top:4px;
+  font-size:13px;
+  background:#f8fafc;
+  border-radius:9px;
+  padding:7px 9px;
+  margin-top:6px;
+  word-break:break-word;
+}
+
+.empty{
+  text-align:center;
+  color:#777;
+  padding:25px;
+}
+
+/* TOAST */
+#toast{
+  position:fixed;
+  left:50%;
+  bottom:20px;
+  transform:translateX(-50%);
+  background:#111827;
+  color:white;
+  padding:11px 15px;
+  border-radius:12px;
+  display:none;
+  z-index:500;
+  box-shadow:0 5px 20px rgba(0,0,0,.2);
 }
 </style>
 </head>
@@ -188,8 +377,8 @@ img{
 <!-- HEADER -->
 <div class="header">
   <div class="title">
-    <img src="https://www.shutterstock.com/image-vector/black-silhouette-lips-speaking-sound-600w-2723804783.jpg">
-    <span> HAY Celotehan</span>
+    <span class="logo">💬</span>
+    <span>HAY Celotehan</span>
   </div>
 
   <div class="wave">
@@ -198,460 +387,1606 @@ img{
   </div>
 </div>
 
+
+<!-- LOGIN / REGISTER -->
 <div id="loginPage">
 
+  <!-- LOGIN -->
+  <div id="loginForm" class="auth-box">
 
-<!-- FORM LOGIN -->
-<div id="loginForm">
+    <h2>👋 Login</h2>
 
-    <h2>Login</h2>
+    <input
+      type="email"
+      id="loginEmail"
+      placeholder="Email"
+    >
 
-    <input type="email" id="loginEmail" placeholder="Email">
+    <input
+      type="password"
+      id="loginPassword"
+      placeholder="Password"
+    >
 
-    <input type="password" id="loginPassword" placeholder="Password">
+    <button
+      class="primary"
+      onclick="login()"
+    >
+      Login
+    </button>
 
-    <button onclick="login()">Login</button>
-
-
-    <p>
-        Belum punya akun?
-        <button onclick="bukaDaftar()">Daftar Akun</button>
+    <p style="text-align:center">
+      Belum punya akun?
+      <button
+        class="link-btn"
+        onclick="bukaDaftar()"
+      >
+        Daftar Akun
+      </button>
     </p>
 
-</div>
-
-
-<!-- FORM DAFTAR AKUN -->
-<div id="registerForm" class="box" style="display:none;">
-    <h2>Daftar Akun</h2>
-
-    <input type="text" id="regName" placeholder="Nama Lengkap">
-
-    <input type="email" id="regEmail" placeholder="Email">
-
-    <input type="password" id="regPassword" placeholder="Password">
-
-    <input type="password" id="regConfirm" placeholder="Konfirmasi Password">
-
-    <button onclick="register()">Daftar</button>
-
-    <p>
-        Sudah punya akun?
-        <button onclick="kembaliLogin()">Login</button>
-    </p>
-
-    <p id="registerMessage"></p>
-</div>
-
-<div class="container" id="homePage" style="display:none;">
-
-    <div style="text-align:center;margin-bottom:20px;">
-        <h2>Selamat Datang</h2>
-        <h3 id="namaUser"></h3>
-    </div>
-<!-- POST FORM -->
-<div class="post-box">
-  <input id="title" placeholder="Judul postingan...">
-  <textarea id="text" placeholder="Tulis sesuatu..."></textarea>
-
-  <div class="actions">
-    <label class="btn">
-      📷 Upload
-      <input type="file" id="image" hidden>
-      <div id="namaFile"
-style="
-margin-top:8px;
-font-size:13px;
-color:#666;">
-Belum ada file dipilih
-</div>
-    </label>
-
-    <button id="postBtn" class="post-btn">Posting</button>
   </div>
 
-  <div id="fileInfo" style="font-size:12px;color:#555;margin-top:5px;"></div>
+
+  <!-- REGISTER -->
+  <div
+    id="registerForm"
+    class="auth-box"
+    style="display:none"
+  >
+
+    <h2>✨ Buat Akun</h2>
+
+    <input
+      type="text"
+      id="regName"
+      placeholder="Nama Lengkap"
+    >
+
+    <input
+      type="email"
+      id="regEmail"
+      placeholder="Email"
+    >
+
+    <input
+      type="password"
+      id="regPassword"
+      placeholder="Password"
+    >
+
+    <input
+      type="password"
+      id="regConfirm"
+      placeholder="Konfirmasi Password"
+    >
+
+    <div class="small">
+      Pilih gender:
+    </div>
+
+    <div class="gender-row">
+
+      <button
+        type="button"
+        class="gender-option"
+        id="genderL"
+        onclick="pilihGender('L')"
+      >
+        ♂️ Laki-laki
+      </button>
+
+      <button
+        type="button"
+        class="gender-option"
+        id="genderP"
+        onclick="pilihGender('P')"
+      >
+        ♀️ Perempuan
+      </button>
+
+    </div>
+
+    <button
+      class="primary"
+      onclick="register()"
+    >
+      Daftar
+    </button>
+
+    <p style="text-align:center">
+      Sudah punya akun?
+      <button
+        class="link-btn"
+        onclick="kembaliLogin()"
+      >
+        Login
+      </button>
+    </p>
+
+    <p
+      id="registerMessage"
+      class="small"
+    ></p>
+
+  </div>
+
 </div>
 
-<div id="posts"></div>
+
+<!-- HOME -->
+<div
+  id="homePage"
+  style="display:none"
+>
+
+  <!-- WELCOME -->
+  <div class="welcome">
+
+    <div>
+
+      <div class="small">
+        Selamat datang 👋
+      </div>
+
+      <div class="user-name">
+
+        <span id="namaUser"></span>
+
+        <span
+          id="genderUser"
+          class="gender-logo"
+        ></span>
+
+      </div>
+
+    </div>
+
+    <button
+      class="secondary"
+      onclick="logout()"
+    >
+      🚪 Logout
+    </button>
+
+  </div>
+
+
+  <main>
+
+    <!-- POST FORM -->
+    <div class="post-box">
+
+      <input
+        id="title"
+        placeholder="Judul postingan..."
+      >
+
+      <textarea
+        id="text"
+        placeholder="Tulis sesuatu..."
+      ></textarea>
+
+      <div class="actions">
+
+        <label class="upload-label">
+
+          📎 Upload
+
+          <input
+            type="file"
+            id="image"
+            hidden
+          >
+
+        </label>
+
+        <button
+          id="postBtn"
+          class="post-btn"
+        >
+          Posting
+        </button>
+
+      </div>
+
+      <div
+        id="namaFile"
+        class="file-name"
+      >
+        Belum ada file dipilih
+      </div>
+
+    </div>
+
+
+    <!-- POSTS -->
+    <div id="posts">
+      <div class="empty">
+        Belum ada celotehan 😌
+      </div>
+    </div>
+
+  </main>
 
 </div>
+
+
+<div id="toast"></div>
+
 
 <!-- FIREBASE -->
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import {
-  getFirestore, collection, addDoc, onSnapshot,
-  doc, updateDoc, arrayUnion, deleteDoc
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-/* 🔥 GANTI CONFIG FIREBASE KAMU */
+import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  onSnapshot,
+  doc,
+  updateDoc,
+  arrayUnion,
+  deleteDoc
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+import {
+  getAuth,
+  signInAnonymously
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+
+/* FIREBASE */
+
 const firebaseConfig = {
- apiKey: "AIzaSyCuXshySBhgcYMASF1Tu8Fn2M7NyUJ1_7E",
-  authDomain: "celotehan-d7306.firebaseapp.com",
-  projectId: "celotehan-d7306",
-  storageBucket: "celotehan-d7306.firebasestorage.app"
+
+  apiKey:
+    "AIzaSyCuXshySBhgcYMAS1FTu8Fn2M7NyUJ1_7E",
+
+  authDomain:
+    "celotehan-d7306.firebaseapp.com",
+
+  projectId:
+    "celotehan-d7306",
+
+  storageBucket:
+    "celotehan-d7306.firebasestorage.app"
+
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-signInAnonymously(getAuth(app));
 
-const postsDiv = document.getElementById("posts");
+const app =
+  initializeApp(firebaseConfig);
 
-const title = document.getElementById("title");
-const text = document.getElementById("text");
-const fileInput = document.getElementById("image");
-const fileInfo = document.getElementById("fileInfo");
-const postBtn =
-document.getElementById("postBtn");
+const db =
+  getFirestore(app);
 
-document.getElementById("image")
-.addEventListener("change", function(){
+const auth =
+  getAuth(app);
 
-    let file = this.files[0];
 
-    if(file){
+/* ANONYMOUS AUTH */
 
-        document.getElementById("namaFile")
-        .innerText =
-        "📎 " + file.name;
+signInAnonymously(auth)
+.catch(error => {
 
-    }else{
-
-        document.getElementById("namaFile")
-        .innerText =
-        "Belum ada file dipilih";
-
-    }
+  console.error(
+    "Firebase Auth:",
+    error
+  );
 
 });
+
+
+/* ELEMENT */
+
+const title =
+  document.getElementById("title");
+
+const text =
+  document.getElementById("text");
+
+const fileInput =
+  document.getElementById("image");
+
+const postBtn =
+  document.getElementById("postBtn");
+
+const postsDiv =
+  document.getElementById("posts");
+
+
+/* TOAST */
+
+function showToast(message){
+
+  const toast =
+    document.getElementById("toast");
+
+  toast.textContent =
+    message;
+
+  toast.style.display =
+    "block";
+
+  clearTimeout(
+    window.toastTimer
+  );
+
+  window.toastTimer =
+    setTimeout(
+      () => {
+        toast.style.display =
+          "none";
+      },
+      2500
+    );
+
+}
+
+
+/* ESCAPE HTML */
+
+function esc(value){
+
+  return String(
+    value ?? ""
+  ).replace(
+    /[&<>"']/g,
+
+    char => ({
+
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#039;"
+
+    }[char])
+
+  );
+
+}
+
+
+/* GENDER ICON */
+
+function genderIcon(gender){
+
+  return gender === "P"
+    ? "♀️"
+    : "♂️";
+
+}
+
 
 /* FILE NAME */
-fileInput.addEventListener("change", ()=>{
-  const file = fileInput.files[0];
-  fileInfo.innerText = file ? "📄 " + file.name : "";
-});
 
-/* POST */
-postBtn.onclick = async()=>{
-  const t = title.value.trim();
-  const tx = text.value.trim();
-  const file = fileInput.files[0];
+fileInput.addEventListener(
+  "change",
+  () => {
 
-  if(!t && !tx && !file) return;
+    const file =
+      fileInput.files[0];
 
-  postBtn.disabled = true;
+    document.getElementById(
+      "namaFile"
+    ).textContent =
+      file
+        ? "📎 " + file.name
+        : "Belum ada file dipilih";
 
-  let url = "";
+  }
+);
 
-   if(file){
 
-    const formData = new FormData();
+/* =========================
+   POSTING
+========================= */
 
-    formData.append("file", file);
+postBtn.onclick =
+async () => {
 
-    formData.append(
-        "upload_preset",
-        "Celotehan"
+  const t =
+    title.value.trim();
+
+  const tx =
+    text.value.trim();
+
+  const file =
+    fileInput.files[0];
+
+
+  if(
+    !t &&
+    !tx &&
+    !file
+  ){
+
+    showToast(
+      "Isi postingan dulu ya 😄"
     );
 
-    const res = await fetch(
-        "https://api.cloudinary.com/v1_1/dhzgp20sw/auto/upload",
-        {
-            method: "POST",
-            body: formData
-        }
-    );
-
-    const data = await res.json();
-
-console.log("HASIL CLOUDINARY:", data);
-
-if(data.secure_url){
-    url = data.secure_url;
-}else{
-    alert("Upload gagal");
     return;
-}
-}
 
-  const username = localStorage.getItem("namaLogin") || "Anonim";
-  await addDoc(collection(db,"posts"),{
-    username: username,
-
-    title:t,
-    text:tx,
-
-    image:url,
-
-    fileName: file ? file.name : "",
-
-    fileType: file ? file.type : "",
-
-    comments:[],
-    minimized:false,
-    created:new Date().toLocaleString()
-});
-
-  /* RESET */
-  title.value="";
-  text.value="";
-  fileInput.value="";
-  fileInfo.innerText="";
-
-  postBtn.disabled = false;
-};
-
-/* RENDER */
-onSnapshot(collection(db,"posts"),snap=>{
-  postsDiv.innerHTML="";
-
-  snap.forEach(d=>{
-    const data = d.data();
-
-    postsDiv.innerHTML += `
-      <div class="post">
-        <div class="top">
-          <div style="font-size:14px;font-weight:bold;color:#333;">
-        👤 ${data.username || "Anonim"}
-    </div>
-
-    <div class="time">
-        🕒 ${data.created}
-    </div>
-          <div>
-            <button class="btn" onclick="toggle('${d.id}',${data.minimized})">
-              ${data.minimized ? "📂" : "📦"}
-            </button>
-            <button class="btn" onclick="hapus('${d.id}')">🗑️</button>
-          </div>
-        </div>
-
-       ${!data.minimized ? `
-
-    <h3 style="margin-top:12px;">
-        ${data.title || "Tanpa Judul"}
-    </h3>
-
-    <p>${data.text || ""}</p>
-          ${data.image ? `<img src="${data.image}">` : ""}
-
-          <div class="comment-box">
-            <input id="c-${d.id}" placeholder="Komentar...">
-            <button onclick="kirim('${d.id}')">Kirim</button>
-          </div>
-
-          ${(data.comments || []).map(c=>`<div class="comment">💬 ${c}</div>`).join("")}
-        ` : ""}
-      </div>
-    `;
-  });
-});
-
-/* ACTION */
-window.hapus = id => deleteDoc(doc(db,"posts",id));
-
-window.toggle = async(id,val)=>{
-  await updateDoc(doc(db,"posts",id),{
-    minimized:!val
-  });
-};
-
-window.kirim = async(id)=>{
-  const input = document.getElementById("c-"+id);
-  const val = input.value.trim();
-  if(!val) return;
-
-  const username =
-localStorage.getItem("namaLogin") || "Anonim";
-
-await updateDoc(doc(db,"posts",id),{
-    comments: arrayUnion(username + ": " + val)
-});
-
-  input.value="";
-};
-
-
-function register(){
-
-    let nama = document.getElementById("regName").value;
-    let email = document.getElementById("regEmail").value;
-    let password = document.getElementById("regPassword").value;
-    let confirm = document.getElementById("regConfirm").value;
-
-    let pesan = document.getElementById("registerMessage");
-
-
-    if(nama=="" || email=="" || password==""){
-        pesan.innerHTML="Data belum lengkap";
-        return;
-    }
-
-
-    if(password !== confirm){
-        pesan.innerHTML="Password tidak sama";
-        return;
-    }
-
-
-    let akun = {
-        nama:nama,
-        email:email,
-        password:password
-    };
-
-
-    localStorage.setItem("akun", JSON.stringify(akun));
-
-
-    pesan.innerHTML="Pendaftaran berhasil";
-
-
-    setTimeout(()=>{
-        document.getElementById("registerForm").style.display="none";
-    },1500);
-
-}
-</script>
-
-<script>
-
-document.getElementById("image")
-.addEventListener("change", function(){
-
-    let file = this.files[0];
-
-    if(file){
-
-        document.getElementById("namaFile")
-        .innerText =
-        "📎 " + file.name;
-
-    }else{
-
-        document.getElementById("namaFile")
-        .innerText =
-        "Belum ada file dipilih";
-
-    }
-
-});
-
-function bukaDaftar(){
-    document.getElementById("loginForm").style.display="none";
-    document.getElementById("registerForm").style.display="block";
-}
-
-
-function kembaliLogin(){
-    document.getElementById("registerForm").style.display="none";
-    document.getElementById("loginForm").style.display="block";
-}
-
-function register(){
-
-    let nama = document.getElementById("regName").value;
-    let email = document.getElementById("regEmail").value;
-    let password = document.getElementById("regPassword").value;
-    let confirm = document.getElementById("regConfirm").value;
-
-
-    if(nama=="" || email=="" || password==""){
-        alert("Data belum lengkap");
-        return;
-    }
-
-
-    if(password !== confirm){
-        alert("Password tidak sama");
-        return;
-    }
-
-
-    let akun = {
-        nama: nama,
-        email: email,
-        password: password
-    };
-
-
-    localStorage.setItem("akun", JSON.stringify(akun));
-
-
-    alert("Pendaftaran berhasil");
-
-
-    document.getElementById("registerForm").style.display="none";
-    document.getElementById("loginForm").style.display="block";
-
-}
-
-function login(){
-
-    let email = document.getElementById("loginEmail").value;
-    let password = document.getElementById("loginPassword").value;
-
-
-    let dataAkun = localStorage.getItem("akun");
-
-
-    if(!dataAkun){
-        alert("Belum ada akun, silahkan daftar dulu");
-        return;
-    }
-
-
-    let akun = JSON.parse(dataAkun);
-
-
-if(email === akun.email && password === akun.password){
-
-    alert("Login berhasil");
-
-     localStorage.setItem("loginStatus","aktif");
-    localStorage.setItem("namaLogin", akun.nama);
-
-    document.getElementById("loginForm").style.display="none";
-
-
-    document.getElementById("homePage").style.display="block";
-
-
-    document.getElementById("namaUser").innerHTML = 
-    "Halo, " + akun.nama;
-
-    }else{
-
-        alert("Email atau password salah");
-    }
   }
 
 
-   function logout(){
-    alert("Logout diklik");
+  /* USER */
+
+  const username =
+    localStorage.getItem(
+      "namaLogin"
+    ) ||
+    localStorage.getItem(
+      "username"
+    ) ||
+    "Anonim";
 
 
-}
+  const gender =
+    localStorage.getItem(
+      "genderLogin"
+    ) ||
+    "L";
 
-window.onload = function(){
 
-    let status = localStorage.getItem("loginStatus");
+  postBtn.disabled =
+    true;
 
-    if(status === "aktif"){
+  postBtn.textContent =
+    "Mengirim...";
 
-        let nama = localStorage.getItem("namaLogin");
-        document.getElementById("loginForm").style.display="none";
-        document.getElementById("homePage").style.display="block";
 
-        document.getElementById("namaUser").innerHTML =
-        "Halo, " + nama;
+  try{
+
+    let url = "";
+
+
+    /* CLOUDINARY */
+
+    if(file){
+
+      const formData =
+        new FormData();
+
+
+      formData.append(
+        "file",
+        file
+      );
+
+
+      formData.append(
+        "upload_preset",
+        "Celotehan"
+      );
+
+
+      const res =
+        await fetch(
+
+          "https://api.cloudinary.com/v1_1/dhzgp20sw/auto/upload",
+
+          {
+            method:"POST",
+
+            body:formData
+          }
+
+        );
+
+
+      const data =
+        await res.json();
+
+
+      console.log(
+        "STATUS CLOUDINARY:",
+        res.status
+      );
+
+      console.log(
+        "HASIL CLOUDINARY:",
+        data
+      );
+
+
+      if(
+        !res.ok ||
+        !data.secure_url
+      ){
+
+        throw new Error(
+          data?.error?.message ||
+          "Upload Cloudinary gagal"
+        );
+
+      }
+
+
+      url =
+        data.secure_url;
+
+
+      console.log(
+        "URL FILE:",
+        url
+      );
 
     }
 
-}
+
+    /* FIRESTORE */
+
+    await addDoc(
+      collection(
+        db,
+        "posts"
+      ),
+
+      {
+
+        username:
+          username,
+
+        gender:
+          gender,
+
+        title:
+          t,
+
+        text:
+          tx,
+
+        image:
+          url,
+
+        fileName:
+          file
+            ? file.name
+            : "",
+
+        fileType:
+          file
+            ? file.type
+            : "",
+
+        comments:
+          [],
+
+        minimized:
+          false,
+
+        created:
+          new Date()
+            .toLocaleString(
+              "id-ID"
+            )
+
+      }
+
+    );
+
+
+    /* RESET */
+
+    title.value =
+      "";
+
+    text.value =
+      "";
+
+    fileInput.value =
+      "";
+
+    document.getElementById(
+      "namaFile"
+    ).textContent =
+      "Belum ada file dipilih";
+
+
+    showToast(
+      "Celotehan berhasil diposting 🎉"
+    );
+
+
+  }catch(error){
+
+    console.error(
+      "GAGAL POSTING:",
+      error
+    );
+
+    showToast(
+      "Posting gagal: " +
+      error.message
+    );
+
+
+  }finally{
+
+    postBtn.disabled =
+      false;
+
+    postBtn.textContent =
+      "Posting";
+
+  }
+
+};
+
+
+/* =========================
+   RENDER POSTS
+========================= */
+
+onSnapshot(
+
+  collection(
+    db,
+    "posts"
+  ),
+
+  snapshot => {
+
+    postsDiv.innerHTML =
+      "";
+
+
+    if(
+      snapshot.empty
+    ){
+
+      postsDiv.innerHTML =
+        `<div class="empty">
+          Belum ada celotehan 😌
+        </div>`;
+
+      return;
+
+    }
+
+
+    snapshot.forEach(
+      d => {
+
+        const data =
+          d.data();
+
+
+        const gender =
+          data.gender ||
+          "L";
+
+
+        /* MEDIA */
+
+        let media =
+          "";
+
+
+        if(
+          data.image
+        ){
+
+          if(
+            (data.fileType || "")
+              .startsWith(
+                "image/"
+              )
+          ){
+
+            media =
+              `<img
+                class="post-media"
+                src="${esc(data.image)}"
+                alt="file"
+              >`;
+
+          }
+
+
+          else if(
+            (data.fileType || "")
+              .startsWith(
+                "video/"
+              )
+          ){
+
+            media =
+              `<video
+                class="post-media"
+                controls
+                src="${esc(data.image)}"
+              ></video>`;
+
+          }
+
+
+          else if(
+            (data.fileType || "")
+              .startsWith(
+                "audio/"
+              )
+          ){
+
+            media =
+              `<audio
+                style="width:100%;margin-top:10px"
+                controls
+                src="${esc(data.image)}"
+              ></audio>`;
+
+          }
+
+
+          else{
+
+            media =
+              `<a
+                class="file-link"
+                href="${esc(data.image)}"
+                target="_blank"
+                rel="noopener"
+              >
+                📄
+                ${esc(
+                  data.fileName ||
+                  "Buka file"
+                )}
+              </a>`;
+
+          }
+
+        }
+
+
+        /* COMMENTS */
+
+        const comments =
+          (
+            data.comments ||
+            []
+          ).map(
+
+            comment => {
+
+              /*
+               * FORMAT BARU
+               */
+
+              if(
+                typeof comment ===
+                "object"
+              ){
+
+                return `
+                  <div class="comment">
+
+                    💬
+
+                    ${genderIcon(
+                      comment.gender
+                    )}
+
+                    <b>
+                      ${esc(
+                        comment.username ||
+                        "Anonim"
+                      )}
+                    </b>
+
+                    :
+                    ${esc(
+                      comment.text ||
+                      ""
+                    )}
+
+                  </div>
+                `;
+
+              }
+
+
+              /*
+               * FORMAT KOMENTAR LAMA
+               */
+
+              return `
+                <div class="comment">
+                  💬 ${esc(comment)}
+                </div>
+              `;
+
+            }
+
+          ).join("");
+
+
+        /* POST */
+
+        postsDiv.innerHTML += `
+
+          <article
+            class="post"
+          >
+
+            <div
+              class="post-header"
+            >
+
+              <div>
+
+                <div
+                  class="author"
+                >
+
+                  ${genderIcon(
+                    gender
+                  )}
+
+                  ${esc(
+                    data.username ||
+                    "Anonim"
+                  )}
+
+                </div>
+
+                <div
+                  class="time"
+                >
+
+                  🕒
+
+                  ${esc(
+                    data.created ||
+                    ""
+                  )}
+
+                </div>
+
+              </div>
+
+
+              <div
+                class="post-actions"
+              >
+
+                <button
+                  class="icon-btn"
+                  onclick="
+                    togglePost(
+                      '${d.id}',
+                      ${data.minimized ? "true" : "false"}
+                    )
+                  "
+                >
+
+                  ${
+                    data.minimized
+                      ? "📂"
+                      : "📦"
+                  }
+
+                </button>
+
+
+                <button
+                  class="icon-btn"
+                  onclick="
+                    hapusPost(
+                      '${d.id}'
+                    )
+                  "
+                >
+
+                  🗑️
+
+                </button>
+
+              </div>
+
+            </div>
+
+
+            ${
+              !data.minimized
+
+              ? `
+
+                <h3>
+                  ${esc(
+                    data.title ||
+                    "Tanpa Judul"
+                  )}
+                </h3>
+
+
+                <p>
+                  ${esc(
+                    data.text ||
+                    ""
+                  )}
+                </p>
+
+
+                ${media}
+
+
+                <div
+                  class="comment-box"
+                >
+
+                  <input
+                    id="c-${d.id}"
+                    placeholder="Tulis komentar..."
+                  >
+
+                  <button
+                    onclick="
+                      kirim(
+                        '${d.id}'
+                      )
+                    "
+                  >
+                    Kirim
+                  </button>
+
+                </div>
+
+
+                ${comments}
+
+              `
+
+              : ""
+
+            }
+
+          </article>
+
+        `;
+
+      }
+
+    );
+
+  },
+
+  error => {
+
+    console.error(
+      "Firestore:",
+      error
+    );
+
+    postsDiv.innerHTML =
+      `<div class="empty">
+        Gagal mengambil postingan:<br>
+        ${esc(error.message)}
+      </div>`;
+
+  }
+
+);
+
+
+/* =========================
+   HAPUS
+========================= */
+
+window.hapusPost =
+async id => {
+
+  if(
+    !confirm(
+      "Hapus postingan ini?"
+    )
+  ){
+
+    return;
+
+  }
+
+
+  try{
+
+    await deleteDoc(
+      doc(
+        db,
+        "posts",
+        id
+      )
+    );
+
+
+    showToast(
+      "Postingan dihapus 🗑️"
+    );
+
+
+  }catch(error){
+
+    console.error(
+      error
+    );
+
+    showToast(
+      "Gagal menghapus: " +
+      error.message
+    );
+
+  }
+
+};
+
+
+/* =========================
+   MINIMIZE
+========================= */
+
+window.togglePost =
+async (
+  id,
+  value
+) => {
+
+  try{
+
+    await updateDoc(
+
+      doc(
+        db,
+        "posts",
+        id
+      ),
+
+      {
+        minimized:
+          !value
+      }
+
+    );
+
+  }catch(error){
+
+    console.error(
+      error
+    );
+
+    showToast(
+      "Gagal mengubah tampilan"
+    );
+
+  }
+
+};
+
+
+/* =========================
+   KOMENTAR
+========================= */
+
+window.kirim = async function(id) {
+  try {
+
+    const input = document.getElementById("c-" + id);
+
+    if (!input) {
+      console.error("Input komentar tidak ditemukan:", id);
+      return;
+    }
+
+    const val = input.value.trim();
+
+    if (!val) return;
+
+    // AMBIL NAMA USER
+    const namaKomentar =
+      localStorage.getItem("namaLogin") ||
+      localStorage.getItem("username") ||
+      "Anonim";
+
+    // AMBIL GENDER USER
+    const genderKomentar =
+      localStorage.getItem("genderLogin") ||
+      "L";
+
+    // SIMPAN KOMENTAR
+    await updateDoc(
+      doc(db, "posts", id),
+      {
+        comments: arrayUnion({
+          username: namaKomentar,
+          gender: genderKomentar,
+          text: val
+        })
+      }
+    );
+
+    input.value = "";
+
+    console.log("Komentar berhasil dikirim");
+
+  } catch (error) {
+
+    console.error(
+      "GAGAL KOMENTAR:",
+      error
+    );
+
+    alert(
+      "Komentar gagal: " +
+      error.message
+    );
+
+  }
+};
+
 </script>
+
+
+<!-- LOGIN / REGISTER SCRIPT -->
+<script>
+
+let selectedGender =
+  "";
+
+
+/* GENDER */
+
+function pilihGender(g){
+
+  selectedGender =
+    g;
+
+
+  document
+    .getElementById(
+      "genderL"
+    )
+    .classList.toggle(
+      "active",
+      g === "L"
+    );
+
+
+  document
+    .getElementById(
+      "genderP"
+    )
+    .classList.toggle(
+      "active",
+      g === "P"
+    );
+
+}
+
+
+/* DAFTAR */
+
+function bukaDaftar(){
+
+  document
+    .getElementById(
+      "loginForm"
+    )
+    .style.display =
+      "none";
+
+
+  document
+    .getElementById(
+      "registerForm"
+    )
+    .style.display =
+      "block";
+
+}
+
+
+/* LOGIN */
+
+function kembaliLogin(){
+
+  document
+    .getElementById(
+      "registerForm"
+    )
+    .style.display =
+      "none";
+
+
+  document
+    .getElementById(
+      "loginForm"
+    )
+    .style.display =
+      "block";
+
+}
+
+
+/* REGISTER */
+
+function register(){
+
+  const nama =
+    document
+      .getElementById(
+        "regName"
+      )
+      .value
+      .trim();
+
+
+  const email =
+    document
+      .getElementById(
+        "regEmail"
+      )
+      .value
+      .trim();
+
+
+  const password =
+    document
+      .getElementById(
+        "regPassword"
+      )
+      .value;
+
+
+  const confirm =
+    document
+      .getElementById(
+        "regConfirm"
+      )
+      .value;
+
+
+  const pesan =
+    document
+      .getElementById(
+        "registerMessage"
+      );
+
+
+  if(
+    !nama ||
+    !email ||
+    !password
+  ){
+
+    pesan.textContent =
+      "Data belum lengkap";
+
+    return;
+
+  }
+
+
+  if(
+    password !==
+    confirm
+  ){
+
+    pesan.textContent =
+      "Password tidak sama";
+
+    return;
+
+  }
+
+
+  if(
+    !selectedGender
+  ){
+
+    pesan.textContent =
+      "Pilih gender dulu ya";
+
+    return;
+
+  }
+
+
+  const akun = {
+
+    nama:
+      nama,
+
+    email:
+      email,
+
+    password:
+      password,
+
+    gender:
+      selectedGender
+
+  };
+
+
+  localStorage.setItem(
+    "akun",
+    JSON.stringify(
+      akun
+    )
+  );
+
+
+  pesan.textContent =
+    "Pendaftaran berhasil 🎉";
+
+
+  setTimeout(
+
+    () => {
+
+      kembaliLogin();
+
+      pesan.textContent =
+        "";
+
+    },
+
+    800
+
+  );
+
+}
+
+
+/* LOGIN */
+
+function login(){
+
+  const email =
+    document
+      .getElementById(
+        "loginEmail"
+      )
+      .value
+      .trim();
+
+
+  const password =
+    document
+      .getElementById(
+        "loginPassword"
+      )
+      .value;
+
+
+  const raw =
+    localStorage.getItem(
+      "akun"
+    );
+
+
+  if(!raw){
+
+    alert(
+      "Belum ada akun, silakan daftar dulu."
+    );
+
+    return;
+
+  }
+
+
+  const akun =
+    JSON.parse(
+      raw
+    );
+
+
+  if(
+
+    email ===
+    akun.email &&
+
+    password ===
+    akun.password
+
+  ){
+
+    localStorage.setItem(
+      "loginStatus",
+      "aktif"
+    );
+
+
+    localStorage.setItem(
+      "namaLogin",
+      akun.nama
+    );
+
+
+    localStorage.setItem(
+      "genderLogin",
+      akun.gender ||
+      "L"
+    );
+
+
+    tampilkanHome(
+
+      akun.nama,
+
+      akun.gender ||
+      "L"
+
+    );
+
+
+  }else{
+
+    alert(
+      "Email atau password salah."
+    );
+
+  }
+
+}
+
+
+/* HOME */
+
+function tampilkanHome(
+  nama,
+  gender
+){
+
+  document
+    .getElementById(
+      "loginPage"
+    )
+    .style.display =
+      "none";
+
+
+  document
+    .getElementById(
+      "homePage"
+    )
+    .style.display =
+      "block";
+
+
+  document
+    .getElementById(
+      "namaUser"
+    )
+    .textContent =
+      nama;
+
+
+  document
+    .getElementById(
+      "genderUser"
+    )
+    .textContent =
+      gender === "P"
+        ? "♀️"
+        : "♂️";
+
+}
+
+
+/* LOGOUT */
+
+function logout(){
+
+  localStorage.removeItem(
+    "loginStatus"
+  );
+
+  localStorage.removeItem(
+    "namaLogin"
+  );
+
+  localStorage.removeItem(
+    "genderLogin"
+  );
+
+
+  document
+    .getElementById(
+      "homePage"
+    )
+    .style.display =
+      "none";
+
+
+  document
+    .getElementById(
+      "loginPage"
+    )
+    .style.display =
+      "flex";
+
+
+  document
+    .getElementById(
+      "loginForm"
+    )
+    .style.display =
+      "block";
+
+
+  document
+    .getElementById(
+      "registerForm"
+    )
+    .style.display =
+      "none";
+
+
+  document
+    .getElementById(
+      "loginEmail"
+    )
+    .value =
+      "";
+
+
+  document
+    .getElementById(
+      "loginPassword"
+    )
+    .value =
+      "";
+
+}
+
+
+/* AUTO LOGIN */
+
+window.addEventListener(
+  "load",
+  () => {
+
+    const status =
+      localStorage.getItem(
+        "loginStatus"
+      );
+
+
+    const nama =
+      localStorage.getItem(
+        "namaLogin"
+      );
+
+
+    const gender =
+      localStorage.getItem(
+        "genderLogin"
+      ) ||
+      "L";
+
+
+    if(
+      status === "aktif" &&
+      nama
+    ){
+
+      tampilkanHome(
+        nama,
+        gender
+      );
+
+    }
+
+  }
+);
+
+</script>
+
 </body>
 </html>
