@@ -922,54 +922,28 @@ async () => {
 
     /* FIRESTORE */
 
-    await addDoc(
-      collection(
-        db,
-        "posts"
-      ),
+    await addDoc(collection(db,"posts"), {
 
-      {
+  username: username,
+  gender: gender,
 
-        username:
-          username,
+  title: t,
+  text: tx,
 
-        gender:
-          gender,
+  image: url,
 
-        title:
-          t,
+  fileName: file ? file.name : "",
+  fileType: file ? file.type : "",
 
-        text:
-          tx,
+  comments: [],
+  minimized: false,
 
-        image:
-          url,
+  created: new Date().toLocaleString("id-ID"),
 
-        fileName:
-          file
-            ? file.name
-            : "",
+  // INI YANG DIPAKAI UNTUK URUTAN
+  createdAt: new Date()
 
-        fileType:
-          file
-            ? file.type
-            : "",
-
-        comments:
-          [],
-
-        minimized:
-          false,
-
-        created:
-          new Date()
-            .toLocaleString(
-              "id-ID"
-            )
-
-      }
-
-    );
+});
 
 
     /* RESET */
@@ -1025,335 +999,303 @@ async () => {
 ========================= */
 
 onSnapshot(
+  collection(db, "posts"),
+  snap => {
 
-  collection(
-    db,
-    "posts"
-  ),
+    const posts = [];
 
-  snapshot => {
+    snap.forEach(d => {
+      posts.push({
+        id: d.id,
+        data: d.data()
+      });
+    });
 
-    postsDiv.innerHTML =
-      "";
+    // POSTINGAN TERBARU SELALU DI ATAS
+    posts.sort((a, b) => {
 
+      const getTime = post => {
 
-    if(
-      snapshot.empty
-    ){
-
-      postsDiv.innerHTML =
-        `<div class="empty">
-          Belum ada celotehan 😌
-        </div>`;
-
-      return;
-
-    }
-
-
-    snapshot.forEach(
-      d => {
-
-        const data =
-          d.data();
-
-
-        const gender =
-          data.gender ||
-          "L";
-
-
-        /* MEDIA */
-
-        let media =
-          "";
-
-
-        if(
-          data.image
-        ){
-
-          if(
-            (data.fileType || "")
-              .startsWith(
-                "image/"
-              )
-          ){
-
-            media =
-              `<img
-                class="post-media"
-                src="${esc(data.image)}"
-                alt="file"
-              >`;
-
-          }
-
-
-          else if(
-            (data.fileType || "")
-              .startsWith(
-                "video/"
-              )
-          ){
-
-            media =
-              `<video
-                class="post-media"
-                controls
-                src="${esc(data.image)}"
-              ></video>`;
-
-          }
-
-
-          else if(
-            (data.fileType || "")
-              .startsWith(
-                "audio/"
-              )
-          ){
-
-            media =
-              `<audio
-                style="width:100%;margin-top:10px"
-                controls
-                src="${esc(data.image)}"
-              ></audio>`;
-
-          }
-
-
-          else{
-
-            media =
-              `<a
-                class="file-link"
-                href="${esc(data.image)}"
-                target="_blank"
-                rel="noopener"
-              >
-                📄
-                ${esc(
-                  data.fileName ||
-                  "Buka file"
-                )}
-              </a>`;
-
-          }
-
+        // Data baru: Firebase Timestamp
+        if (
+          post.data.createdAt &&
+          typeof post.data.createdAt.toMillis === "function"
+        ) {
+          return post.data.createdAt.toMillis();
         }
 
+        // Data lama
+        if (post.data.createdAt?.seconds) {
+          return post.data.createdAt.seconds * 1000;
+        }
 
-        /* COMMENTS */
+        // Kalau tidak ada createdAt
+        return 0;
+      };
 
-        const comments =
-          (
-            data.comments ||
-            []
-          ).map(
+      return getTime(b) - getTime(a);
+    });
 
-            comment => {
+    postsDiv.innerHTML = "";
 
-              /*
-               * FORMAT BARU
-               */
+    if (posts.length === 0) {
 
-              if(
-                typeof comment ===
-                "object"
-              ){
+      postsDiv.innerHTML = `
+        <div class="empty">
+          Belum ada celotehan 😌
+        </div>
+      `;
 
-                return `
-                  <div class="comment">
+      return;
+    }
 
-                    💬
+    posts.forEach(({ id, data }) => {
 
-                    ${genderIcon(
-                      comment.gender
-                    )}
+      let media = "";
 
-                    <b>
-                      ${esc(
-                        comment.username ||
-                        "Anonim"
-                      )}
-                    </b>
+      /* ======================
+         FILE / MEDIA
+      ====================== */
 
-                    :
-                    ${esc(
-                      comment.text ||
-                      ""
-                    )}
+      if (data.image) {
 
-                  </div>
-                `;
+        if (
+          (data.fileType || "")
+          .startsWith("image/")
+        ) {
 
-              }
-
-
-              /*
-               * FORMAT KOMENTAR LAMA
-               */
-
-              return `
-                <div class="comment">
-                  💬 ${esc(comment)}
-                </div>
-              `;
-
-            }
-
-          ).join("");
-
-
-        /* POST */
-
-        postsDiv.innerHTML += `
-
-          <article
-            class="post"
-          >
-
-            <div
-              class="post-header"
+          media = `
+            <img
+              class="post-media"
+              src="${esc(data.image)}"
+              alt="file"
             >
+          `;
 
-              <div>
+        } else if (
+          (data.fileType || "")
+          .startsWith("video/")
+        ) {
 
-                <div
-                  class="author"
-                >
+          media = `
+            <video
+              class="post-media"
+              controls
+              src="${esc(data.image)}"
+            ></video>
+          `;
 
-                  ${genderIcon(
-                    gender
-                  )}
+        } else if (
+          (data.fileType || "")
+          .startsWith("audio/")
+        ) {
 
+          media = `
+            <audio
+              style="width:100%;margin-top:10px"
+              controls
+              src="${esc(data.image)}"
+            ></audio>
+          `;
+
+        } else {
+
+          media = `
+            <a
+              class="file-link"
+              href="${esc(data.image)}"
+              target="_blank"
+              rel="noopener"
+            >
+              📄 ${esc(data.fileName || "Buka file")}
+            </a>
+          `;
+        }
+      }
+
+
+      /* ======================
+         KOMENTAR
+      ====================== */
+
+      const comments =
+        (data.comments || [])
+        .map(comment => {
+
+          // Komentar baru
+          if (
+            typeof comment === "object" &&
+            comment !== null
+          ) {
+
+            return `
+              <div class="comment">
+
+                💬
+                ${genderIcon(comment.gender)}
+
+                <b>
                   ${esc(
-                    data.username ||
+                    comment.username ||
                     "Anonim"
                   )}
+                </b>
 
-                </div>
+                :
+                ${esc(
+                  comment.text || ""
+                )}
 
-                <div
-                  class="time"
-                >
+              </div>
+            `;
 
-                  🕒
+          }
 
-                  ${esc(
-                    data.created ||
-                    ""
-                  )}
+          // Komentar lama
+          return `
+            <div class="comment">
+              💬 ${esc(comment)}
+            </div>
+          `;
 
-                </div>
+        })
+        .join("");
+
+
+      /* ======================
+         POSTINGAN
+      ====================== */
+
+      postsDiv.innerHTML += `
+
+        <article class="post">
+
+          <div class="post-header">
+
+            <div>
+
+              <div class="author">
+
+                ${genderIcon(
+                  data.gender
+                )}
+
+                ${esc(
+                  data.username ||
+                  "Anonim"
+                )}
 
               </div>
 
+              <div class="time">
 
-              <div
-                class="post-actions"
-              >
+                🕒
 
-                <button
-                  class="icon-btn"
-                  onclick="
-                    togglePost(
-                      '${d.id}',
-                      ${data.minimized ? "true" : "false"}
-                    )
-                  "
-                >
-
-                  ${
-                    data.minimized
-                      ? "📂"
-                      : "📦"
-                  }
-
-                </button>
-
-
-                <button
-                  class="icon-btn"
-                  onclick="
-                    hapusPost(
-                      '${d.id}'
-                    )
-                  "
-                >
-
-                  🗑️
-
-                </button>
+                ${esc(
+                  data.created ||
+                  ""
+                )}
 
               </div>
 
             </div>
 
 
-            ${
-              !data.minimized
+            <div class="post-actions">
 
-              ? `
+              <button
+                class="icon-btn"
+                onclick="
+                  togglePost(
+                    '${id}',
+                    ${data.minimized ? "true" : "false"}
+                  )
+                "
+              >
 
-                <h3>
-                  ${esc(
-                    data.title ||
-                    "Tanpa Judul"
-                  )}
-                </h3>
+                ${
+                  data.minimized
+                    ? "📂"
+                    : "📦"
+                }
 
-
-                <p>
-                  ${esc(
-                    data.text ||
-                    ""
-                  )}
-                </p>
-
-
-                ${media}
+              </button>
 
 
-                <div
-                  class="comment-box"
+              <button
+                class="icon-btn"
+                onclick="
+                  hapusPost('${id}')
+                "
+              >
+
+                🗑️
+
+              </button>
+
+            </div>
+
+          </div>
+
+
+          ${
+            !data.minimized
+
+            ? `
+
+              <h3>
+                ${esc(
+                  data.title ||
+                  "Tanpa Judul"
+                )}
+              </h3>
+
+              <p>
+                ${esc(
+                  data.text ||
+                  ""
+                )}
+              </p>
+
+              ${media}
+
+
+              <div class="comment-box">
+
+                <input
+                  id="c-${id}"
+                  placeholder="Tulis komentar..."
+                  onkeydown="
+                    if(event.key==='Enter'){
+                      kirim('${id}')
+                    }
+                  "
                 >
 
-                  <input
-                    id="c-${d.id}"
-                    placeholder="Tulis komentar..."
-                  >
+                <button
+                  onclick="
+                    kirim('${id}')
+                  "
+                >
+                  Kirim
+                </button>
 
-                  <button
-                    onclick="
-                      kirim(
-                        '${d.id}'
-                      )
-                    "
-                  >
-                    Kirim
-                  </button>
-
-                </div>
+              </div>
 
 
-                ${comments}
+              ${comments}
 
-              `
+            `
 
-              : ""
+            : ""
 
-            }
+          }
 
-          </article>
+        </article>
 
-        `;
+      `;
 
-      }
-
-    );
+    });
 
   },
 
@@ -1364,16 +1306,20 @@ onSnapshot(
       error
     );
 
-    postsDiv.innerHTML =
-      `<div class="empty">
-        Gagal mengambil postingan:<br>
+    postsDiv.innerHTML = `
+      <div class="empty">
+
+        Gagal mengambil postingan:
+
+        <br>
+
         ${esc(error.message)}
-      </div>`;
+
+      </div>
+    `;
 
   }
-
 );
-
 
 /* =========================
    HAPUS
